@@ -1,0 +1,44 @@
+services:
+  n8n_web:
+    container_name: n8n_web
+    image: n8nio/n8n:latest
+    restart: always
+    ports:
+      - 5677:5678
+    volumes:
+      - n8n_data:/home/node/.n8n
+    env_file:
+      - .env
+
+  n8n_worker:
+    container_name: n8n_worker
+    image: n8nio/n8n:latest
+    command: worker
+    restart: always
+    ports:
+      - 5676:5678
+    volumes:
+      - n8n_data:/home/node/.n8n
+    env_file:
+      - .env
+
+  n8n_postgres:
+    container_name: n8n_postgres
+    image: postgres:12
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  n8n_redis:
+    container_name: n8n_redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    restart: always
+
+volumes:
+  n8n_data:
+  postgres_data:
