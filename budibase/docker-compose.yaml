@@ -1,0 +1,13 @@
+services:
+  budibase:
+    restart: always
+    image: budibase/budibase:latest
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    volumes:
+      - budibase_data:/data
+
+volumes:
+  budibase_data:
