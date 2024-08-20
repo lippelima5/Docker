@@ -4,7 +4,7 @@ services:
     image: n8nio/n8n:latest
     restart: always
     ports:
-      - 5677:5678
+      - 5678:5678
     volumes:
       - n8n_data:/home/node/.n8n
     env_file:
@@ -16,7 +16,7 @@ services:
     command: worker
     restart: always
     ports:
-      - 5676:5678
+      - 5677:5678
     volumes:
       - n8n_data:/home/node/.n8n
     env_file:
