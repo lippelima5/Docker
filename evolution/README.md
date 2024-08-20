@@ -1,7 +1,5 @@
 # Evolution API
-
-Docker compose config for model duplicate it
-
+Template docker compose config
 
 ## Uso
 
