@@ -21,6 +21,10 @@ services:
       - n8n_data:/home/node/.n8n
     env_file:
       - .env
+    environment:
+      - EXECUTIONS_PROCESS=queue
+      - QUEUE_BULL_REDIS_HOST=n8n_redis
+      - QUEUE_BULL_REDIS_PORT=6379
 
   n8n_postgres:
     container_name: n8n_postgres
