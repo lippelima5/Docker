@@ -5,7 +5,7 @@ This folder contains the docker compose configs for all the services used person
 Feel free to add your own configs in the folder. or fix any errors. hehe
 
 
-# docker/docker-install
+## docker/docker-install
 Home of the script that lives at `get.docker.com` and `test.docker.com`!
 
 The purpose of the install script is for a convenience for quickly
@@ -17,10 +17,16 @@ instructions](https://docs.docker.com/engine/install/).
 
 This repository is solely maintained by Docker, Inc.
 
-## Usage:
+### Usage:
 
 From `https://get.docker.com`:
 ```shell
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
+```
+
+## Portainer
+
+```shell
+docker run -d -p 9000:9000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 ```
