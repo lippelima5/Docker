@@ -208,7 +208,8 @@ x-shared-env: &shared-api-worker-env
 services:
   # API service
   api:
-    image: langgenius/dify-api:0.8.0
+    image: langgenius/dify-api:latest
+    pull_policy: always  
     restart: always
     environment:
       # Use the shared environment variables.
@@ -228,7 +229,8 @@ services:
   # worker service
   # The Celery worker for processing the queue.
   worker:
-    image: langgenius/dify-api:0.8.0
+    image: langgenius/dify-api:latest
+    pull_policy: always  
     restart: always
     environment:
       # Use the shared environment variables.
@@ -247,7 +249,8 @@ services:
 
   # Frontend web application.
   web:
-    image: langgenius/dify-web:0.8.0
+    image: langgenius/dify-web:latest
+    pull_policy: always  
     restart: always
     environment:
       CONSOLE_API_URL: ${CONSOLE_API_URL:-}
@@ -292,7 +295,8 @@ services:
 
   # The DifySandbox
   sandbox:
-    image: langgenius/dify-sandbox:0.2.7
+    image: langgenius/dify-sandbox:latest
+    pull_policy: always
     restart: always
     environment:
       # The DifySandbox configurations
@@ -419,11 +423,23 @@ services:
 
   # Qdrant vector store.
   # (if used, you need to set VECTOR_STORE to qdrant in the api & worker service.)
+  # qdrant:
+  #   image: langgenius/qdrant:latest
+  #   profiles:
+  #     - qdrant
+  #   restart: always
+  #   volumes:
+  #     - ./volumes/qdrant:/qdrant/storage
+  #   environment:
+  #     QDRANT_API_KEY: ${QDRANT_API_KEY:-difyai123456}
   qdrant:
-    image: langgenius/qdrant:v1.7.3
+    image: qdrant/qdrant:latest
     profiles:
       - qdrant
     restart: always
+    ports:
+      - 6333:6333
+      - 6334:6334
     volumes:
       - ./volumes/qdrant:/qdrant/storage
     environment:
