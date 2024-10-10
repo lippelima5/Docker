@@ -8,5 +8,7 @@ services:
     volumes:
       - qdrant_storage:/qdrant/storage
     restart: always
+    environment:
+      QDRANT_API_KEY: WVF5YThaHlkYwhGUSmCRgsX3tD5ngdN8pkih
 volumes:
   qdrant_storage:
