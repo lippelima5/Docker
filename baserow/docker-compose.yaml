@@ -1,0 +1,12 @@
+services:
+  baserow:
+    container_name: baserow
+    image: baserow/baserow:latest
+    env_file:
+      - .env
+    ports:
+      - "8082:80"
+    volumes:
+      - baserow_data:/baserow/data
+volumes:
+  baserow_data:
