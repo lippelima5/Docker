@@ -1,0 +1,79 @@
+services:
+  nginx:
+    container_name: nginx
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: always
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./nginx/data:/data
+      - ./nginx/letsencrypt:/etc/letsencrypt
+
+  evolution_api:
+    container_name: evolution_api
+    image: atendai/evolution-api:v2.2.2
+    restart: always
+    depends_on:
+      - redis
+      - postgres
+    ports:
+      - 8080:8080
+    volumes:
+      - ./evolution/instances:/evolution/instances
+    env_file:
+      - .env
+
+  n8n_web:
+    container_name: n8n_web
+    image: n8nio/n8n:latest
+    restart: always
+    ports:
+      - 5678:5678
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgres
+      - evolution_api
+
+  n8n_worker:
+    container_name: n8n_worker
+    image: n8nio/n8n:latest
+    command: worker
+    restart: always
+    ports:
+      - 5677:5678
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    env_file:
+      - .env
+    environment:
+      - EXECUTIONS_PROCESS=queue
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+    depends_on:
+      - redis
+      - postgres
+      - evolution_api
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: always
+    ports:
+      - 6379:6379

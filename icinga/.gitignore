@@ -1,2 +1,7 @@
-.env
-data
+*
+!.gitignore
+!.env.example
+!docker-compose.yaml
+!Dockerfile
+!docker-compose.yml
+!README.md

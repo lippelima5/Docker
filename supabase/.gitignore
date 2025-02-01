@@ -3,3 +3,11 @@ volumes/storage
 .env
 test.http
 docker-compose.override.yml
+
+*
+!.gitignore
+!.env.example
+!docker-compose.yaml
+!Dockerfile
+!docker-compose.yml
+!README.md

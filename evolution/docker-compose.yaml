@@ -1,20 +1,57 @@
-volumes:
-  evolution_instances:
-  evolution_store:
-
 services:
-  evolution_api:
+  api:
     container_name: evolution_api
-    # image: atendai/evolution-api:latest
-    image: atendai/evolution-api:v2.1.0
+    image: atendai/evolution-api:v2.2.0
     restart: always
+    depends_on:
+      - redis
+      - postgres
     ports:
       - 8080:8080
     volumes:
       - evolution_instances:/evolution/instances
-      - evolution_store:/evolution/store
+    networks:
+      - evolution-net
     env_file:
       - .env
-    command: ['node', './dist/src/main.js']
     expose:
       - 8080
+
+  redis:
+    image: redis:latest
+    networks:
+      - evolution-net
+    container_name: redis
+    command: >
+      redis-server --port 6379 --appendonly yes
+    volumes:
+      - evolution_redis:/data
+    ports:
+      - 6379:6379
+
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    networks:
+      - evolution-net
+    command: [ "postgres", "-c", "max_connections=1000" ]
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+
+volumes:
+  evolution_instances:
+  evolution_redis:
+  postgres_data:
+
+
+networks:
+  evolution-net:
+    name: evolution-net
+    driver: bridge
